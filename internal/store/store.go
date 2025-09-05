@@ -1,0 +1,146 @@
+package store
+
+import (
+	"sort"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/jerson/mandrillfordev/internal/types"
+)
+
+type Store struct {
+	mu        sync.RWMutex
+	messages  map[string]*types.MessageRecord
+	scheduled map[string]*types.MessageRecord
+}
+
+func NewStore() *Store {
+	return &Store{
+		messages:  make(map[string]*types.MessageRecord),
+		scheduled: make(map[string]*types.MessageRecord),
+	}
+}
+
+func (s *Store) SaveMessage(m *types.MessageRecord) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.messages[m.ID] = m
+}
+
+func (s *Store) GetMessage(id string) (*types.MessageRecord, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	m, ok := s.messages[id]
+	return m, ok
+}
+
+func (s *Store) AddScheduled(m *types.MessageRecord) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.scheduled[m.ID] = m
+	s.messages[m.ID] = m
+}
+
+func (s *Store) RemoveScheduled(id string) (*types.MessageRecord, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	m, ok := s.scheduled[id]
+	if ok {
+		delete(s.scheduled, id)
+	}
+	return m, ok
+}
+
+func (s *Store) GetScheduled(id string) (*types.MessageRecord, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	m, ok := s.scheduled[id]
+	return m, ok
+}
+
+func (s *Store) ListScheduled(to string) []*types.MessageRecord {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]*types.MessageRecord, 0, len(s.scheduled))
+	for _, m := range s.scheduled {
+		if to == "" || containsAddress(m.To, to) {
+			out = append(out, m)
+		}
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].ScheduledAt.Before(*out[j].ScheduledAt) })
+	return out
+}
+
+func containsAddress(addresses []string, target string) bool {
+	t := strings.ToLower(strings.TrimSpace(target))
+	for _, a := range addresses {
+		if strings.ToLower(strings.TrimSpace(a)) == t {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *Store) Search(q string, from, to *time.Time, tags []string, senders []string, limit int) []*types.MessageRecord {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]*types.MessageRecord, 0, 64)
+	ql := strings.ToLower(q)
+	tagset := make(map[string]struct{})
+	for _, t := range tags {
+		tagset[strings.ToLower(t)] = struct{}{}
+	}
+	senderset := make(map[string]struct{})
+	for _, se := range senders {
+		senderset[strings.ToLower(se)] = struct{}{}
+	}
+
+	for _, m := range s.messages {
+		if from != nil && m.CreatedAt.Before(*from) {
+			continue
+		}
+		if to != nil && m.CreatedAt.After(*to) {
+			continue
+		}
+		if ql != "" {
+			if !strings.Contains(strings.ToLower(m.Subject), ql) &&
+				!strings.Contains(strings.ToLower(m.From), ql) {
+				// search to addresses too
+				hit := false
+				for _, a := range m.To {
+					if strings.Contains(strings.ToLower(a), ql) {
+						hit = true
+						break
+					}
+				}
+				if !hit {
+					continue
+				}
+			}
+		}
+		if len(tagset) > 0 {
+			ok := false
+			for _, t := range m.Tags {
+				if _, ex := tagset[strings.ToLower(t)]; ex {
+					ok = true
+					break
+				}
+			}
+			if !ok {
+				continue
+			}
+		}
+		if len(senderset) > 0 {
+			if _, ok := senderset[strings.ToLower(m.From)]; !ok {
+				continue
+			}
+		}
+		out = append(out, m)
+		if limit > 0 && len(out) >= limit {
+			break
+		}
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.After(out[j].CreatedAt) })
+	return out
+}

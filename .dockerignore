@@ -1,0 +1,16 @@
+.git
+.gitignore
+.gocache
+bin
+dist
+*.test
+*.out
+mandrillfordev
+node_modules
+examples/node-client/node_modules
+.DS_Store
+.idea
+.vscode
+docker-compose.yml
+compose.yml
+

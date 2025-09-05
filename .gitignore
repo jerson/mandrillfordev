@@ -1,0 +1,25 @@
+# Go
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+dist/
+coverage.*
+.gocache/
+
+# Local binaries
+mandrillfordev
+
+# Node examples
+examples/node-client/node_modules/
+examples/node-client/package-lock.json
+
+# Editor/OS
+.DS_Store
+.idea/
+.vscode/
+
