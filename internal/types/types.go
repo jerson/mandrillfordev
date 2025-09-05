@@ -14,31 +14,47 @@ type MandrillAttachment struct {
 	Content string `json:"content"` // base64-encoded
 }
 
+// Merge variables
+type MandrillMergeVar struct {
+	Name    string `json:"name"`
+	Content any    `json:"content"`
+}
+
+type MandrillRcptMergeVars struct {
+	Rcpt string             `json:"rcpt"`
+	Vars []MandrillMergeVar `json:"vars"`
+}
+
 type MandrillMessage struct {
-	HTML                    string              `json:"html,omitempty"`
-	Text                    string              `json:"text,omitempty"`
-	Subject                 string              `json:"subject,omitempty"`
-	FromEmail               string              `json:"from_email"`
-	FromName                string              `json:"from_name,omitempty"`
-	To                      []MandrillRecipient `json:"to"`
-	Headers                 map[string]string   `json:"headers,omitempty"`
-	Important               bool                `json:"important,omitempty"`
-	TrackOpens              bool                `json:"track_opens,omitempty"`
-	TrackClicks             bool                `json:"track_clicks,omitempty"`
-	AutoText                bool                `json:"auto_text,omitempty"`
-	AutoHTML                bool                `json:"auto_html,omitempty"`
-	InlineCSS               bool                `json:"inline_css,omitempty"`
-	URLStripQS              bool                `json:"url_strip_qs,omitempty"`
-	PreserveRecipients      bool                `json:"preserve_recipients,omitempty"`
-	ViewContentLink         bool                `json:"view_content_link,omitempty"`
-	BccAddress              string              `json:"bcc_address,omitempty"`
-	SigningDomain           string              `json:"signing_domain,omitempty"`
-	ReturnPathDomain        string              `json:"return_path_domain,omitempty"`
-	Tags                    []string            `json:"tags,omitempty"`
-	Subaccount              string              `json:"subaccount,omitempty"`
-	GoogleAnalyticsDomains  []string            `json:"google_analytics_domains,omitempty"`
-	GoogleAnalyticsCampaign string              `json:"google_analytics_campaign,omitempty"`
-	Metadata                map[string]string   `json:"metadata,omitempty"`
+	HTML                    string                  `json:"html,omitempty"`
+	Text                    string                  `json:"text,omitempty"`
+	Subject                 string                  `json:"subject,omitempty"`
+	FromEmail               string                  `json:"from_email"`
+	FromName                string                  `json:"from_name,omitempty"`
+	To                      []MandrillRecipient     `json:"to"`
+	Headers                 map[string]string       `json:"headers,omitempty"`
+	Important               bool                    `json:"important,omitempty"`
+	TrackOpens              bool                    `json:"track_opens,omitempty"`
+	TrackClicks             bool                    `json:"track_clicks,omitempty"`
+	AutoText                bool                    `json:"auto_text,omitempty"`
+	AutoHTML                bool                    `json:"auto_html,omitempty"`
+	InlineCSS               bool                    `json:"inline_css,omitempty"`
+	URLStripQS              bool                    `json:"url_strip_qs,omitempty"`
+	PreserveRecipients      bool                    `json:"preserve_recipients,omitempty"`
+	ViewContentLink         bool                    `json:"view_content_link,omitempty"`
+	BccAddress              string                  `json:"bcc_address,omitempty"`
+	TrackingDomain          string                  `json:"tracking_domain,omitempty"`
+	SigningDomain           string                  `json:"signing_domain,omitempty"`
+	ReturnPathDomain        string                  `json:"return_path_domain,omitempty"`
+	Merge                   bool                    `json:"merge,omitempty"`
+	MergeLanguage           string                  `json:"merge_language,omitempty"`
+	GlobalMergeVars         []MandrillMergeVar      `json:"global_merge_vars,omitempty"`
+	MergeVars               []MandrillRcptMergeVars `json:"merge_vars,omitempty"`
+	Tags                    []string                `json:"tags,omitempty"`
+	Subaccount              string                  `json:"subaccount,omitempty"`
+	GoogleAnalyticsDomains  []string                `json:"google_analytics_domains,omitempty"`
+	GoogleAnalyticsCampaign string                  `json:"google_analytics_campaign,omitempty"`
+	Metadata                map[string]string       `json:"metadata,omitempty"`
 	RecipientMetadata       []struct {
 		Rcpt   string            `json:"rcpt"`
 		Values map[string]string `json:"values"`
