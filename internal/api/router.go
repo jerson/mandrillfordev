@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"html"
 	"io"
 	"net/http"
 	"net/mail"
@@ -354,6 +355,33 @@ func handleSendTemplate(w http.ResponseWriter, r *http.Request, cfg config.Confi
 	req.Message.Text = replaceVars(req.Message.Text, vars)
 
 	sr := types.SendRequest{Key: req.Key, Message: req.Message, Async: req.Async, IPPool: req.IPPool, SendAt: req.SendAt}
+	// In debug mode, append the original (sanitized) request to the message body for troubleshooting
+	if isDebug() {
+		dbg := map[string]any{
+			"template_name":    req.TemplateName,
+			"template_content": req.TemplateContent,
+			"message":          req.Message,
+			"async":            req.Async,
+			"ip_pool":          req.IPPool,
+			"send_at":          req.SendAt,
+			"_note":            "Debug info: original send-template request (key omitted)",
+		}
+		if b, err := json.MarshalIndent(dbg, "", "  "); err == nil {
+			// Text part
+			if strings.TrimSpace(sr.Message.Text) == "" {
+				sr.Message.Text = string(b)
+			} else {
+				sr.Message.Text += "\n\n---- debug: send-template request ----\n" + string(b)
+			}
+			// HTML part
+			esc := html.EscapeString(string(b))
+			if strings.TrimSpace(sr.Message.HTML) == "" {
+				sr.Message.HTML = "<pre style=\"white-space:pre-wrap\">" + esc + "</pre>"
+			} else {
+				sr.Message.HTML += "<hr><h4>Debug: send-template request</h4><pre style=\"white-space:pre-wrap\">" + esc + "</pre>"
+			}
+		}
+	}
 	var scheduledAt *time.Time
 	if strings.TrimSpace(sr.SendAt) != "" {
 		if t, err := parseTime(sr.SendAt); err == nil {
@@ -721,4 +749,14 @@ func recipientsFromMessage(m types.MandrillMessage) []string {
 		rcpts = append(rcpts, strings.TrimSpace(m.BccAddress))
 	}
 	return rcpts
+}
+
+// isDebug reports whether debug logging/behaviors are enabled via env
+func isDebug() bool {
+	v := strings.TrimSpace(os.Getenv("MANDRILL_DEBUG"))
+	if v == "" {
+		v = strings.TrimSpace(os.Getenv("DEBUG"))
+	}
+	v = strings.ToLower(v)
+	return v == "1" || v == "true" || v == "yes" || v == "on"
 }
