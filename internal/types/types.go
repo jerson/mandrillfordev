@@ -162,4 +162,77 @@ type MessageRecord struct {
 	Subject      string
 	Tags         []string
 	Raw          []byte
+	TemplateName string
+}
+
+// Template management
+type Template struct {
+	Name          string     `json:"name"`
+	FromEmail     string     `json:"from_email,omitempty"`
+	FromName      string     `json:"from_name,omitempty"`
+	Subject       string     `json:"subject,omitempty"`
+	Code          string     `json:"code,omitempty"`         // draft HTML
+	Text          string     `json:"text,omitempty"`         // draft text
+	PublishedCode string     `json:"publish_code,omitempty"` // published HTML
+	PublishedText string     `json:"publish_text,omitempty"` // published text
+	Labels        []string   `json:"labels,omitempty"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	PublishedAt   *time.Time `json:"published_at,omitempty"`
+}
+
+type TemplateAddRequest struct {
+	Key       string   `json:"key"`
+	Name      string   `json:"name"`
+	FromEmail string   `json:"from_email,omitempty"`
+	FromName  string   `json:"from_name,omitempty"`
+	Subject   string   `json:"subject,omitempty"`
+	Code      string   `json:"code,omitempty"`
+	Text      string   `json:"text,omitempty"`
+	Publish   bool     `json:"publish,omitempty"`
+	Labels    []string `json:"labels,omitempty"`
+}
+
+type TemplateInfoRequest struct {
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}
+
+// Update supports partial updates via pointer fields (nil means unchanged)
+type TemplateUpdateRequest struct {
+	Key       string    `json:"key"`
+	Name      string    `json:"name"`
+	FromEmail *string   `json:"from_email"`
+	FromName  *string   `json:"from_name"`
+	Subject   *string   `json:"subject"`
+	Code      *string   `json:"code"`
+	Text      *string   `json:"text"`
+	Publish   *bool     `json:"publish"`
+	Labels    *[]string `json:"labels"`
+}
+
+type TemplatePublishRequest struct {
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}
+
+type TemplateDeleteRequest struct {
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}
+
+type TemplateListRequest struct {
+	Key   string `json:"key"`
+	Label string `json:"label,omitempty"`
+}
+
+type TemplateTimeSeriesRequest struct {
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}
+
+type TemplateRenderRequest struct {
+	Key             string            `json:"key"`
+	TemplateName    string            `json:"template_name"`
+	TemplateContent []TemplateContent `json:"template_content"`
 }

@@ -13,12 +13,14 @@ type Store struct {
 	mu        sync.RWMutex
 	messages  map[string]*types.MessageRecord
 	scheduled map[string]*types.MessageRecord
+	templates map[string]*types.Template
 }
 
 func NewStore() *Store {
 	return &Store{
 		messages:  make(map[string]*types.MessageRecord),
 		scheduled: make(map[string]*types.MessageRecord),
+		templates: make(map[string]*types.Template),
 	}
 }
 
@@ -142,5 +144,62 @@ func (s *Store) Search(q string, from, to *time.Time, tags []string, senders []s
 		}
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.After(out[j].CreatedAt) })
+	return out
+}
+
+// Messages returns a snapshot of all messages
+func (s *Store) Messages() []*types.MessageRecord {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]*types.MessageRecord, 0, len(s.messages))
+	for _, m := range s.messages {
+		out = append(out, m)
+	}
+	return out
+}
+
+// Template store ops
+func (s *Store) SaveTemplate(t *types.Template) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.templates[strings.ToLower(t.Name)] = t
+}
+
+func (s *Store) GetTemplate(name string) (*types.Template, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	t, ok := s.templates[strings.ToLower(name)]
+	return t, ok
+}
+
+func (s *Store) DeleteTemplate(name string) (*types.Template, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	key := strings.ToLower(name)
+	t, ok := s.templates[key]
+	if ok {
+		delete(s.templates, key)
+	}
+	return t, ok
+}
+
+func (s *Store) ListTemplates(label string) []*types.Template {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]*types.Template, 0, len(s.templates))
+	for _, t := range s.templates {
+		if label == "" {
+			out = append(out, t)
+			continue
+		}
+		// filter by label case-insensitive
+		for _, l := range t.Labels {
+			if strings.EqualFold(l, label) {
+				out = append(out, t)
+				break
+			}
+		}
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }

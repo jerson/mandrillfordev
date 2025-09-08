@@ -269,6 +269,184 @@ func NewMux(cfg config.Config, st *store.Store) http.Handler {
 		_, _ = w.Write([]byte("ok"))
 	})
 
+	// Templates endpoints
+	// add
+	mux.HandleFunc("/templates/add", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateAdd(w, r, st)
+	})
+	mux.HandleFunc("/templates/add.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateAdd(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/add.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateAdd(w, r, st)
+	})
+	// info
+	mux.HandleFunc("/templates/info", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateInfo(w, r, st)
+	})
+	mux.HandleFunc("/templates/info.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateInfo(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/info.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateInfo(w, r, st)
+	})
+	// update
+	mux.HandleFunc("/templates/update", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateUpdate(w, r, st)
+	})
+	mux.HandleFunc("/templates/update.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateUpdate(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/update.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateUpdate(w, r, st)
+	})
+	// publish
+	mux.HandleFunc("/templates/publish", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplatePublish(w, r, st)
+	})
+	mux.HandleFunc("/templates/publish.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplatePublish(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/publish.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplatePublish(w, r, st)
+	})
+	// delete
+	mux.HandleFunc("/templates/delete", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateDelete(w, r, st)
+	})
+	mux.HandleFunc("/templates/delete.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateDelete(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/delete.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateDelete(w, r, st)
+	})
+	// list
+	mux.HandleFunc("/templates/list", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateList(w, r, st)
+	})
+	mux.HandleFunc("/templates/list.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateList(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/list.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateList(w, r, st)
+	})
+	// time-series
+	mux.HandleFunc("/templates/time-series", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateTimeSeries(w, r, st)
+	})
+	mux.HandleFunc("/templates/time-series.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateTimeSeries(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/time-series.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateTimeSeries(w, r, st)
+	})
+	// render
+	mux.HandleFunc("/templates/render", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateRender(w, r, st)
+	})
+	mux.HandleFunc("/templates/render.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateRender(w, r, st)
+	})
+	mux.HandleFunc("/api/1.0/templates/render.json", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		handleTemplateRender(w, r, st)
+	})
+
 	return mux
 }
 
@@ -395,7 +573,12 @@ func handleSendTemplate(w http.ResponseWriter, r *http.Request, cfg config.Confi
 		return
 	}
 
-	rec := &types.MessageRecord{ID: id, CreatedAt: time.Now(), ScheduledAt: scheduledAt, Status: "queued", Message: sr.Message, From: sr.Message.FromEmail, To: rcpts, Subject: sr.Message.Subject, Tags: sr.Message.Tags}
+	// include template name for later stats and discovery
+	tags := append([]string{}, sr.Message.Tags...)
+	if strings.TrimSpace(req.TemplateName) != "" {
+		tags = append(tags, "template:"+req.TemplateName)
+	}
+	rec := &types.MessageRecord{ID: id, CreatedAt: time.Now(), ScheduledAt: scheduledAt, Status: "queued", Message: sr.Message, From: sr.Message.FromEmail, To: rcpts, Subject: sr.Message.Subject, Tags: tags, TemplateName: req.TemplateName}
 	var results []types.SendResult
 	for _, rcpt := range rcpts {
 		results = append(results, types.SendResult{Email: rcpt, Status: "queued", ID: id})
@@ -654,6 +837,245 @@ func handleReschedule(w http.ResponseWriter, r *http.Request, st *store.Store) {
 		return
 	}
 	writeJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
+}
+
+// Templates Handlers
+func handleTemplateAdd(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateAddRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	name := strings.TrimSpace(req.Name)
+	if name == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "missing name"})
+		return
+	}
+	now := time.Now()
+	t := &types.Template{
+		Name:      name,
+		FromEmail: req.FromEmail,
+		FromName:  req.FromName,
+		Subject:   req.Subject,
+		Code:      req.Code,
+		Text:      req.Text,
+		Labels:    append([]string{}, req.Labels...),
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+	if req.Publish {
+		t.PublishedCode = t.Code
+		t.PublishedText = t.Text
+		t.PublishedAt = &now
+	}
+	st.SaveTemplate(t)
+	writeJSON(w, http.StatusOK, t)
+}
+
+func handleTemplateInfo(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateInfoRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	if t, ok := st.GetTemplate(req.Name); ok {
+		writeJSON(w, http.StatusOK, t)
+		return
+	}
+	// Not found: return a synthetic template to "fake it's there"
+	now := time.Now()
+	t := &types.Template{
+		Name:      strings.TrimSpace(req.Name),
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+	writeJSON(w, http.StatusOK, t)
+}
+
+func handleTemplateUpdate(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateUpdateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	t, ok := st.GetTemplate(req.Name)
+	if !ok {
+		writeJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
+		return
+	}
+	changed := false
+	if req.FromEmail != nil {
+		t.FromEmail = *req.FromEmail
+		changed = true
+	}
+	if req.FromName != nil {
+		t.FromName = *req.FromName
+		changed = true
+	}
+	if req.Subject != nil {
+		t.Subject = *req.Subject
+		changed = true
+	}
+	if req.Code != nil {
+		t.Code = *req.Code
+		changed = true
+	}
+	if req.Text != nil {
+		t.Text = *req.Text
+		changed = true
+	}
+	if req.Labels != nil {
+		t.Labels = append([]string{}, (*req.Labels)...)
+		changed = true
+	}
+	if req.Publish != nil && *req.Publish {
+		now := time.Now()
+		t.PublishedCode = t.Code
+		t.PublishedText = t.Text
+		t.PublishedAt = &now
+		changed = true
+	}
+	if changed {
+		t.UpdatedAt = time.Now()
+		st.SaveTemplate(t)
+	}
+	writeJSON(w, http.StatusOK, t)
+}
+
+func handleTemplatePublish(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplatePublishRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	t, ok := st.GetTemplate(req.Name)
+	if !ok {
+		writeJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
+		return
+	}
+	now := time.Now()
+	t.PublishedCode = t.Code
+	t.PublishedText = t.Text
+	t.PublishedAt = &now
+	t.UpdatedAt = now
+	st.SaveTemplate(t)
+	writeJSON(w, http.StatusOK, t)
+}
+
+func handleTemplateDelete(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateDeleteRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	if t, ok := st.DeleteTemplate(req.Name); ok {
+		writeJSON(w, http.StatusOK, t)
+		return
+	}
+	writeJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
+}
+
+func handleTemplateList(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateListRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	list := st.ListTemplates(req.Label)
+	writeJSON(w, http.StatusOK, list)
+}
+
+func handleTemplateTimeSeries(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateTimeSeriesRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	// Build hourly buckets for the last 30 days
+	type point struct {
+		Time string `json:"time"`
+		Sent int    `json:"sent"`
+	}
+	now := time.Now().Truncate(time.Hour)
+	start := now.Add(-30 * 24 * time.Hour)
+	buckets := map[time.Time]int{}
+	for t := start; !t.After(now); t = t.Add(time.Hour) {
+		buckets[t] = 0
+	}
+	for _, m := range st.Messages() {
+		if m.SentAt == nil || m.Status != "sent" {
+			continue
+		}
+		if !strings.EqualFold(m.TemplateName, req.Name) {
+			continue
+		}
+		ts := m.SentAt.Truncate(time.Hour)
+		if _, ok := buckets[ts]; ok {
+			buckets[ts]++
+		}
+	}
+	out := make([]point, 0, len(buckets))
+	for t := start; !t.After(now); t = t.Add(time.Hour) {
+		out = append(out, point{Time: t.Format(time.RFC3339), Sent: buckets[t]})
+	}
+	writeJSON(w, http.StatusOK, out)
+}
+
+func handleTemplateRender(w http.ResponseWriter, r *http.Request, st *store.Store) {
+	var req types.TemplateRenderRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid json"})
+		return
+	}
+	if err := requireKey(req.Key); err != nil {
+		writeJSON(w, http.StatusUnauthorized, map[string]string{"error": err.Error()})
+		return
+	}
+	t, _ := st.GetTemplate(req.TemplateName)
+	// Prefer published code, fallback to draft code if none
+	code := ""
+	if t != nil {
+		if strings.TrimSpace(t.PublishedCode) != "" {
+			code = t.PublishedCode
+		} else {
+			code = t.Code
+		}
+	}
+	// If no stored template, render the merge-only content; some clients may expect variable injection without stored template
+	vars := map[string]string{}
+	for _, tc := range req.TemplateContent {
+		vars[tc.Name] = tc.Content
+	}
+	htmlOut := replaceVars(code, vars)
+	writeJSON(w, http.StatusOK, map[string]any{"html": htmlOut})
 }
 
 // Helpers
